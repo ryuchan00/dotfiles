@@ -1,0 +1,13 @@
+[ghq]
+	root = ~/src
+[ghq "https://git.pepabo.com/"]
+	vcs = git
+[user]
+	name = yamakawa00
+	email = yamakawa00@pepabo.com
+[push]
+	default = simple
+[core]
+	excludesfile = /Users/yamakawa00/.gitignore_global
+[credential]
+	helper = osxkeychain
