@@ -134,7 +134,7 @@ function peco-src () {
 zle -N peco-src
 bindkey '^]' peco-src
 
-function peco-src () {
+function peco-atom () {
   local selected_dir=$(ghq list -p | peco --query "$LBUFFER")
   if [ -n "$selected_dir" ]; then
     BUFFER="atom ${selected_dir}"
@@ -142,8 +142,8 @@ function peco-src () {
   fi
   zle clear-screen
 }
-zle -N peco-src
-bindkey '^[' peco-src
+zle -N peco-atom
+bindkey '^[' peco-atom
 
 # Prompt
 # ref:https://github.com/kenchan/dotfiles/blob/master/dot.zshrc#L9-L18
