@@ -6,4 +6,4 @@ cd ~/
 
 ln -s $DOTFILES/.gitconfig
 ln -s $DOTFILES/.gitignore_global
-ln -s $DOTFILES/.zshrc
+ln -fs $DOTFILES/.zshrc
