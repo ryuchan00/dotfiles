@@ -164,3 +164,5 @@ function _update_prompt() {
 }
 
 add-zsh-hook precmd _update_prompt
+
+eval "$(rbenv init -)"
