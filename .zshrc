@@ -6,6 +6,7 @@ source $ZSH/oh-my-zsh.sh
 
 # History
 # ref:https://github.com/june29/dotfiles/blob/master/.zshrc#L83-L84
+HISTFILE=$HOME/Dropbox/dotfiles/.zsh-history
 HISTSIZE=530000
 SAVEHIST=530000
 
