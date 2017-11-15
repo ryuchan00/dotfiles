@@ -6,7 +6,7 @@ source $ZSH/oh-my-zsh.sh
 
 # History
 # ref:https://github.com/june29/dotfiles/blob/master/.zshrc#L83-L84
-HISTFILE=$HOME/Dropbox/dotfiles/.zsh-history
+HISTFILE=$HOME/Dropbox/dotfiles/.zsh_history
 HISTSIZE=530000
 SAVEHIST=530000
 
@@ -78,3 +78,5 @@ function _update_prompt() {
 add-zsh-hook precmd _update_prompt
 
 eval "$(rbenv init -)"
+export PATH="$HOME/.rbenv/bin:$PATH"
+if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
