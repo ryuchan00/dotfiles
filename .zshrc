@@ -44,7 +44,7 @@ function peco-src () {
   zle clear-screen
 }
 zle -N peco-src
-bindkey '^]' peco-src
+bindkey '^\' peco-src
 
 function peco-atom () {
   local selected_dir=$(ghq list -p | peco --query "$LBUFFER")
@@ -55,7 +55,7 @@ function peco-atom () {
   zle clear-screen
 }
 zle -N peco-atom
-bindkey '^[' peco-atom
+bindkey '^^' peco-atom
 
 # Prompt
 # ref:https://github.com/kenchan/dotfiles/blob/master/dot.zshrc#L9-L18
