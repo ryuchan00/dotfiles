@@ -34,7 +34,7 @@ function zman() {
     PAGER="less -g -s '+/^ {7}"$1"'" man zshall
 }
 
-# ctrl + ] でghq管理下のファイルを開く
+# ctrl + \ でghq管理下のファイルを開く
 function peco-src () {
   local selected_dir=$(ghq list -p | peco --query "$LBUFFER")
   if [ -n "$selected_dir" ]; then
@@ -44,8 +44,9 @@ function peco-src () {
   zle clear-screen
 }
 zle -N peco-src
-bindkey '^]' peco-src
+bindkey '^\' peco-src
 
+# ctrl + ^ でghq管理下のファイルをatomで開く
 function peco-atom () {
   local selected_dir=$(ghq list -p | peco --query "$LBUFFER")
   if [ -n "$selected_dir" ]; then
@@ -55,7 +56,7 @@ function peco-atom () {
   zle clear-screen
 }
 zle -N peco-atom
-bindkey '^[' peco-atom
+bindkey '^^' peco-atom
 
 # Prompt
 # ref:https://github.com/kenchan/dotfiles/blob/master/dot.zshrc#L9-L18
@@ -64,7 +65,7 @@ autoload -U add-zsh-hook
 autoload -U vcs_info
 setopt prompt_subst
 
-zstyle ':vcs_info:*' enable git svn hg
+zstyle ':vcs_info:*' enable git hg
 zstyle ':vcs_info:*' formats '[%b]%c%u'
 zstyle ':vcs_info:*' actionformats '[%b|%a]%c%u'
 zstyle ':vcs_info:git:*' check-for-changes true
@@ -80,3 +81,7 @@ add-zsh-hook precmd _update_prompt
 eval "$(rbenv init -)"
 export PATH="$HOME/.rbenv/bin:$PATH"
 if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
+
+alias g='git'
+#alias do='docker'
+alias ls='ls -a'
