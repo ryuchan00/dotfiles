@@ -62,12 +62,20 @@ bindkey '^^' peco-atom
 # ref:https://github.com/kenchan/dotfiles/blob/master/dot.zshrc#L9-L18
 autoload -U colors && colors
 autoload -U add-zsh-hook
+# vcsinfo: gitやCVSなどのいわゆるバージョン管理システムから情報を取得してくれる便利な関数。
 autoload -U vcs_info
-setopt prompt_subst
+setopt prompt_subst  #プロンプト表示する度に変数を展開
 
-zstyle ':vcs_info:*' enable git hg
+# どのバージョン管理システムを使うか宣言する(hg: Mervurial(マーキュリアル))
+zstyle ':vcs_info:*' enable git hg svn
+
+# $vcs_info_msg_0_で表示する内容をここに指定します。
 zstyle ':vcs_info:*' formats '[%b]%c%u'
+
+# mergeでコンフリクトが起きたり、何かしら特殊な状況になった場合に formatsの代わりに actionformatsで指定した文字列が$vcs_info_msg_0_に格納される。
 zstyle ':vcs_info:*' actionformats '[%b|%a]%c%u'
+
+# trueにすると formatsという項目で%cと%uというフォーマットが使えるようになる。これは、リポジトリにコミットされていないファイルがあった場合に%cまたは%uに文字列が格納される。
 zstyle ':vcs_info:git:*' check-for-changes true
 
 function _update_prompt() {
