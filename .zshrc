@@ -80,7 +80,7 @@ zstyle ':vcs_info:git:*' check-for-changes true
 
 function _update_prompt() {
   LANG=en_US.UTF-8 vcs_info
-  PROMPT="%{$fg[magenta]%}[%T]%{$reset_color%} %{$fg_bold[blue]%}%~ %{$fg[red]%}($(rbenv version-name)) %{$fg[green]%}${vcs_info_msg_0_}
+  PROMPT="%{$fg[magenta]%}[%T]%{$reset_color%} %{$fg_bold[blue]%}%d %{$fg[red]%}($(rbenv version-name)) %{$fg[green]%}${vcs_info_msg_0_}
 %{$fg_bold[blue]%}$%{$reset_color%} "
 }
 
@@ -90,6 +90,20 @@ eval "$(rbenv init -)"
 export PATH="$HOME/.rbenv/bin:$PATH"
 if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 
+# web db press vol83
 alias g='git'
-#alias do='docker'
-alias ls='ls -a'
+alias ls='ls -F'
+alias la='ls -a'
+alias ll='ls -l'
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+alias mkdir='mkdir -p'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+
+# cdr: 最近移動したディリクトリに移動する
+autoload -Uz add-zsh-hook
+autoload -Uz chpwd_recent_dirs cdr
+add-zsh-hook chpwd chpwd_recent_dirs
