@@ -109,6 +109,7 @@ autoload -Uz chpwd_recent_dirs cdr
 add-zsh-hook chpwd chpwd_recent_dirs
 
 # cdrをpecoで開く
+# ref: http://wada811.blogspot.com/2014/09/zsh-cdr.html
 function peco-cdr() {
     local selected_dir=$(cdr -l | awk '{ print $2 }' | peco)
     if [ -n "$selected_dir" ]; then
