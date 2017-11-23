@@ -107,3 +107,20 @@ alias ....='cd ../../..'
 autoload -Uz add-zsh-hook
 autoload -Uz chpwd_recent_dirs cdr
 add-zsh-hook chpwd chpwd_recent_dirs
+
+# cdrをpecoで開く
+function peco-cdr() {
+    local selected_dir=$(cdr -l | awk '{ print $2 }' | peco)
+    if [ -n "$selected_dir" ]; then
+        BUFFER="cd ${selected_dir}"
+        zle accept-line
+    fi
+}
+zle -N peco-cdr
+bindkey '^e' peco-cdr
+
+# recent-dirs-max: 履歴として保存するディレクトリ、0か負の値で無制限になる
+zstyle ':chpwd:*' recent-dirs-max 200
+
+# recent-dirs-default: trueにすると、cdrコマンドがcdコマンドを兼ねるようになる
+zstyle ':chpwd:*' recent-dirs-default true
