@@ -125,3 +125,6 @@ zstyle ':chpwd:*' recent-dirs-max 200
 
 # recent-dirs-default: trueにすると、cdrコマンドがcdコマンドを兼ねるようになる
 zstyle ':chpwd:*' recent-dirs-default true
+
+# zsh-completions: 補完を強化する
+fpath=(/usr/local/share/zsh-completions(N-/) $fpath)
