@@ -1,6 +1,6 @@
 export ZSH=$HOME/.oh-my-zsh
 
-plugins=(git ruby osx bundler brew rails emoji-clock)
+plugins=(git ruby osx bundler brew rails emoji-clock zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -128,3 +128,6 @@ zstyle ':chpwd:*' recent-dirs-default true
 
 # zsh-completions: 補完を強化する
 fpath=(/usr/local/share/zsh-completions(N-/) $fpath)
+
+# 大文字小文字を区別をしない
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
