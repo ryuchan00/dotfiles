@@ -131,3 +131,6 @@ fpath=(/usr/local/share/zsh-completions(N-/) $fpath)
 
 # 大文字小文字を区別をしない
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+
+# zmv: 複数のファイルを一括でリネームする
+autoload -Uz zmv
