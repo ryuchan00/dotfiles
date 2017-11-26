@@ -151,3 +151,5 @@ function peco-kill() {
 zle -N peco-kill
 bindkey '^k' peco-kill
 
+# Gitのブランチを切り替える
+bindkey '^gc' anyframe-widget-checkout-git-branch
