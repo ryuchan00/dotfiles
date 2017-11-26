@@ -134,3 +134,14 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 
 # zmv: 複数のファイルを一括でリネームする
 autoload -Uz zmv
+
+# anyframeを使ってプロセスを停止する
+function peco-kill() {
+  ps -s $USER -o pid,stat,%cpu,%mem,cputime,command \
+  | anyframe-selector-auto \
+  | awk '{print $1}' \
+  | anyframe-action-execute kill
+}
+zle -N peco-kill
+bindkey '^k' peco-kill
+
