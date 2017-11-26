@@ -6,6 +6,8 @@ source $ZSH/oh-my-zsh.sh
 
 if [[ -f $HOME/.zsh/antigen/antigen.zsh ]]; then
   source $HOME/.zsh/antigen/antigen.zsh
+  antigen bundle mollifier/anyframe
+  antigen apply
 fi
 
 # History
@@ -141,7 +143,7 @@ autoload -Uz zmv
 
 # anyframeを使ってプロセスを停止する
 function peco-kill() {
-  ps -s $USER -o pid,stat,%cpu,%mem,cputime,command \
+  ps -u $USER -o pid,stat,%cpu,%mem,cputime,command \
   | anyframe-selector-auto \
   | awk '{print $1}' \
   | anyframe-action-execute kill
