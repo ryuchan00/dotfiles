@@ -4,6 +4,10 @@ plugins=(git ruby osx bundler brew rails emoji-clock zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
 
+if [[ -f $HOME/.zsh/antigen/antigen.zsh ]]; then
+  source $HOME/.zsh/antigen/antigen.zsh
+fi
+
 # History
 # ref:https://github.com/june29/dotfiles/blob/master/.zshrc#L83-L84
 HISTFILE=$HOME/Dropbox/dotfiles/.zsh_history
