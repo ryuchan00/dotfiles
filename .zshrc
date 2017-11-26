@@ -10,6 +10,11 @@ if [[ -f $HOME/.zsh/antigen/antigen.zsh ]]; then
   antigen apply
 fi
 
+# tmuxをターミナル起動時に開く
+if [ $SHLVL = 1 ]; then
+  tmux
+fi
+
 # History
 # ref:https://github.com/june29/dotfiles/blob/master/.zshrc#L83-L84
 HISTFILE=$HOME/Dropbox/dotfiles/.zsh_history
