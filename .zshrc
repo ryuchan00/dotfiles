@@ -159,3 +159,15 @@ bindkey '^k' peco-kill
 # Gitのブランチを切り替える
 bindkey '^_' anyframe-widget-checkout-git-branch
 bindkey '^/' anyframe-widget-insert-git-branch
+
+# tmuxとAnythingインターフェースを使ってウィンドウを切り替える
+function peco-tmux() {
+  local i=$(tmux lsw | awk '/active.$/ {print NR-1}')
+  local f='#{window_index}: #{window_name}#{window_flags} #{pane_current_path}'
+  tmux lsw -F "$f" \
+    | anyframe-selector-auto "" --initial-index $i \
+    | cut -d ':' -f 1 \
+    | anyframe-action-execute tmux select-window -t
+}
+zle -N peco-tmux
+bindkey '^xw' peco-tmux
