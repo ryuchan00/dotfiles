@@ -152,5 +152,5 @@ zle -N peco-kill
 bindkey '^k' peco-kill
 
 # Gitのブランチを切り替える
-bindkey '^c' anyframe-widget-checkout-git-branch
-bindkey '^b' anyframe-widget-insert-git-branch
+bindkey '^_' anyframe-widget-checkout-git-branch
+bindkey '^/' anyframe-widget-insert-git-branch
