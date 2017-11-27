@@ -129,7 +129,7 @@ function peco-cdr() {
     fi
 }
 zle -N peco-cdr
-bindkey '^e' peco-cdr
+bindkey '^t' peco-cdr
 
 # recent-dirs-max: 履歴として保存するディレクトリ、0か負の値で無制限になる
 zstyle ':chpwd:*' recent-dirs-max 200
@@ -158,7 +158,7 @@ bindkey '^k' peco-kill
 
 # Gitのブランチを切り替える
 bindkey '^_' anyframe-widget-checkout-git-branch
-bindkey '^/' anyframe-widget-insert-git-branch
+bindkey '^]' anyframe-widget-insert-git-branch
 
 # tmuxとAnythingインターフェースを使ってウィンドウを切り替える
 function peco-tmux() {
