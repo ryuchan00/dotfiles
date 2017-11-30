@@ -171,3 +171,4 @@ function peco-tmux() {
 }
 zle -N peco-tmux
 bindkey '^xw' peco-tmux
+export PATH="$(brew --prefix homebrew/php/php71)/bin:$PATH"
