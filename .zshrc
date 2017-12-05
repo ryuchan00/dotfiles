@@ -16,6 +16,7 @@ if [ $SHLVL = 1 ]; then
 fi
 
 # キーのリピート入力認識までの時間とキーリピート時間の確認
+# ref:https://dev.classmethod.jp/tool/mac-keyboard-speed-2/
 echo "Initial Key Repeat Time:$(defaults read -g InitialKeyRepeat)"
 echo "Key Repeat Time        :$(defaults read -g KeyRepeat)"
 
