@@ -17,8 +17,6 @@ fi
 
 # キーのリピート入力認識までの時間とキーリピート時間の確認
 # ref:https://dev.classmethod.jp/tool/mac-keyboard-speed-2/
-echo "Initial Key Repeat Time:$(defaults read -g InitialKeyRepeat)"
-echo "Key Repeat Time        :$(defaults read -g KeyRepeat)"
 
 # History
 # ref:https://github.com/june29/dotfiles/blob/master/.zshrc#L83-L84
