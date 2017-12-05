@@ -15,6 +15,10 @@ if [ $SHLVL = 1 ]; then
   tmux
 fi
 
+# キーのリピート入力認識までの時間とキーリピート時間の確認
+echo "Initial Key Repeat Time:$(defaults read -g InitialKeyRepeat)"
+echo "Key Repeat Time        :$(defaults read -g KeyRepeat)"
+
 # History
 # ref:https://github.com/june29/dotfiles/blob/master/.zshrc#L83-L84
 HISTFILE=$HOME/Dropbox/dotfiles/.zsh_history
@@ -99,6 +103,7 @@ add-zsh-hook precmd _update_prompt
 
 eval "$(rbenv init -)"
 export PATH="$HOME/.rbenv/bin:$PATH"
+
 if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 
 # web db press vol83
@@ -113,6 +118,8 @@ alias mkdir='mkdir -p'
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
+
+alias va='vagrant'
 
 # cdr: 最近移動したディリクトリに移動する
 autoload -Uz add-zsh-hook
@@ -171,3 +178,5 @@ function peco-tmux() {
 }
 zle -N peco-tmux
 bindkey '^xw' peco-tmux
+
+export PATH=$HOME/.nodebrew/current/bin:$PATH

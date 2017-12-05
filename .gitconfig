@@ -1,9 +1,9 @@
 [ghq]
-	root = ~/src
+	root = /Users/yamakawa00/src
 [ghq "https://git.pepabo.com/"]
 	vcs = git
 [user]
-	name = yamakawa00
+	name = ryuchan00
 	email = yamakawa00@pepabo.com
 [push]
 	default = simple
