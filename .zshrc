@@ -181,4 +181,4 @@ bindkey '^xw' peco-tmux
 export PATH=$HOME/.nodebrew/current/bin:$PATH
 
 # brew install phpが必要
-export PATH="$(brew --prefix homebrew/php/php71)/bin:$PATH"
+export PATH="$(brew --prefix homebrew/php/php72)/bin:$PATH"
