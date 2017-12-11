@@ -119,6 +119,7 @@ alias ...='cd ../..'
 alias ....='cd ../../..'
 
 alias va='vagrant'
+alias be='bundle exec'
 
 # cdr: 最近移動したディリクトリに移動する
 autoload -Uz add-zsh-hook
