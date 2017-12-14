@@ -11,3 +11,8 @@
 	excludesfile = /Users/yamakawa00/.gitignore_global
 [credential]
 	helper = osxkeychain
+[color]
+	ui = true
+	diff = auto
+	status = auto
+	branch = auto
