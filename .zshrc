@@ -183,3 +183,10 @@ export PATH=$HOME/.nodebrew/current/bin:$PATH
 
 # brew install phpが必要
 export PATH="$(brew --prefix homebrew/php/php72)/bin:$PATH"
+
+# ref: https://ja.stackoverflow.com/questions/21718/touch%E3%81%A7mkdir-p%E3%82%82%E8%A1%8C%E3%81%84%E3%81%9F%E3%81%84
+dirtouch() {
+      mkdir -p "$(dirname $1)"
+          touch "$1"
+}
+alias touch=dirtouch
