@@ -136,7 +136,7 @@ function peco-cdr() {
     fi
 }
 zle -N peco-cdr
-bindkey '^t' peco-cdr
+bindkey '^e' peco-cdr
 
 # recent-dirs-max: 履歴として保存するディレクトリ、0か負の値で無制限になる
 zstyle ':chpwd:*' recent-dirs-max 200
