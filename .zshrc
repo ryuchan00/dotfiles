@@ -179,6 +179,9 @@ function peco-tmux() {
 zle -N peco-tmux
 bindkey '^xw' peco-tmux
 
+bindkey '⌥f' forward-word
+bindkey '⌥b' backward-word
+
 export PATH=$HOME/.nodebrew/current/bin:$PATH
 
 # brew install phpが必要
