@@ -193,3 +193,4 @@ dirtouch() {
           touch "$1"
 }
 alias touch=dirtouch
+export PATH="/usr/local/sbin:$PATH"
