@@ -179,8 +179,8 @@ function peco-tmux() {
 zle -N peco-tmux
 bindkey '^xw' peco-tmux
 
-bindkey '⌥f' forward-word
-bindkey '⌥b' backward-word
+bindkey '^g' forward-word
+bindkey '^n' backward-word
 
 export PATH=$HOME/.nodebrew/current/bin:$PATH
 
@@ -193,4 +193,5 @@ dirtouch() {
           touch "$1"
 }
 alias touch=dirtouch
+
 export PATH="/usr/local/sbin:$PATH"
