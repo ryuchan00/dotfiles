@@ -195,3 +195,4 @@ dirtouch() {
 alias touch=dirtouch
 
 export PATH="/usr/local/sbin:$PATH"
+alias updatedb='sudo /usr/libexec/locate.updatedb'
