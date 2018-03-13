@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DOTFILES=~/dotfiles
+DOTFILES=$(cd $(dirname $0); pwd)
 
 cd ~/
 
