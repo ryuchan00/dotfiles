@@ -9,6 +9,7 @@
 	default = simple
 [core]
 	excludesfile = /Users/yamakawa00/.gitignore_global
+	autocrlf = input
 [credential]
 	helper = osxkeychain
 [color]
@@ -16,3 +17,6 @@
 	diff = auto
 	status = auto
 	branch = auto
+[alias]
+	graph = log --graph --date-order -C -M --pretty=format:\"<%h> %ad [%an] %Cgreen%d%Creset %s\" --all --date=short
+
