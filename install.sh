@@ -7,19 +7,17 @@ DOTFILES=$(cd $(dirname $0); pwd)
 cd ~/
 now=$(date '+%Y%m%d%H%M%S')
 
-if [[ -e .gitconfig ]]; then
-  mv .gitconfig .gitconfig_$now
-fi
+function avoid_same_file() {
+  if [[ -e $1 ]]; then
+    mv $1 $1_$now
+  fi
+}
 
-if [[ -e .gitignore_global ]]; then
-  mv .gitignore_global .gitignore_global_$now
-fi
+avoid_same_file '.gitconfig'
+avoid_same_file '.gitignore_global'
 
 ln -s $DOTFILES/.gitconfig
 ln -s $DOTFILES/.gitignore_global
 ln -fs $DOTFILES/.zshrc
 ln -fs $DOTFILES/.tmux.conf
-
-function avoid_same_file() {
-  if [[ -e $1 ]]; then
 
