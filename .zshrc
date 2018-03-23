@@ -36,7 +36,7 @@ function peco-select-history() {
         eval $tac | \
         peco --query "$LBUFFER")
     CURSOR=$#BUFFER
-    zle clear-screen
+    # zle clear-screen
 }
 zle -N peco-select-history
 bindkey '^r' peco-select-history
@@ -55,7 +55,7 @@ function peco-src () {
     BUFFER="cd ${selected_dir}"
     zle accept-line
   fi
-  zle clear-screen
+  # zle clear-screen
 }
 zle -N peco-src
 bindkey '^\' peco-src
@@ -67,7 +67,7 @@ function peco-atom () {
     BUFFER="atom ${selected_dir}"
     zle accept-line
   fi
-  zle clear-screen
+  # zle clear-screen
 }
 zle -N peco-atom
 bindkey '^^' peco-atom
