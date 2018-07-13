@@ -195,3 +195,6 @@ alias touch=dirtouch
 
 export PATH="/usr/local/sbin:$PATH"
 alias updatedb='sudo /usr/libexec/locate.updatedb'
+
+# ref: https://github.com/pindexis/qfc
+[[ -s "$HOME/.qfc/bin/qfc.sh" ]] && source "$HOME/.qfc/bin/qfc.sh"
