@@ -198,3 +198,7 @@ alias updatedb='sudo /usr/libexec/locate.updatedb'
 
 # ref: https://github.com/pindexis/qfc
 [[ -s "$HOME/.qfc/bin/qfc.sh" ]] && source "$HOME/.qfc/bin/qfc.sh"
+
+function urlDecode() {
+  echo $1 | nkf -w --url-input
+}
