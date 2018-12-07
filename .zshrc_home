@@ -4,11 +4,10 @@ plugins=(git ruby osx bundler brew rails emoji-clock zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
 
-if [[ -f $HOME/.zsh/antigen/antigen.zsh ]]; then
-  source $HOME/.zsh/antigen/antigen.zsh
-  antigen bundle mollifier/anyframe
-  antigen apply
-fi
+# ref: https://qiita.com/mollifier/items/81b18c012d7841ab33c3#1-%E6%89%8B%E5%8B%95%E3%81%A7%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%81%99%E3%82%8B%E5%A0%B4%E5%90%88
+fpath=($HOME/.zsh/anyframe(N-/) $fpath)
+autoload -Uz anyframe-init
+anyframe-init
 
 # tmuxをターミナル起動時に開く
 if [ $SHLVL = 1 ]; then
