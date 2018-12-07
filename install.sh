@@ -15,9 +15,10 @@ function avoid_same_file() {
 
 avoid_same_file '.gitconfig'
 avoid_same_file '.gitignore_global'
+avoid_same_file '.zshrc'
+avoid_same_file '.tmux.conf'
 
 ln -s $DOTFILES/.gitconfig
 ln -s $DOTFILES/.gitignore_global
-ln -fs $DOTFILES/.zshrc
+ln -fs $DOTFILES/.zshrc_$1 ./.zshrc
 ln -fs $DOTFILES/.tmux.conf
-
