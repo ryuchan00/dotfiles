@@ -178,8 +178,8 @@ function peco-tmux() {
 zle -N peco-tmux
 bindkey '^xw' peco-tmux
 
-bindkey '^t' forward-word
-bindkey '^g' backward-word
+#bindkey '^t' forward-word
+#bindkey '^g' backward-word
 
 export PATH=$HOME/.nodebrew/current/bin:$PATH
 
