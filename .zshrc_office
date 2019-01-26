@@ -99,11 +99,6 @@ function _update_prompt() {
 
 add-zsh-hook precmd _update_prompt
 
-eval "$(rbenv init -)"
-export PATH="$HOME/.rbenv/bin:$PATH"
-
-if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
-
 # web db press vol83
 alias g='git'
 alias ls='ls -F'
@@ -182,6 +177,7 @@ bindkey '^t' forward-word
 bindkey '^g' backward-word
 
 export PATH=$HOME/.nodebrew/current/bin:$PATH
+export PATH=/usr/local/bin:$PATH
 
 # brew install phpが必要
 
@@ -195,9 +191,26 @@ alias touch=dirtouch
 export PATH="/usr/local/sbin:$PATH"
 alias updatedb='sudo /usr/libexec/locate.updatedb'
 
-# ref: https://github.com/pindexis/qfc
-[[ -s "$HOME/.qfc/bin/qfc.sh" ]] && source "$HOME/.qfc/bin/qfc.sh"
 
 function urlDecode() {
   echo $1 | nkf -w --url-input
 }
+export PATH="/usr/local/opt/mysql@5.6/bin:$PATH"
+#export PATH="$HOME/.phpenv/bin:$PATH"
+#eval "$(phpenv init -)"
+#eval "$(rbenv init -)"
+#export PATH="$HOME/.rbenv/bin:$PATH"
+#export PHPENV_ROOT=$HOME/.phpenv
+#export PATH="$PATH:$PHPENV_ROOT/bin"
+
+#if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
+#ref:[anyenvでphpenvとrbenvの共存 - Qiita](https://qiita.com/kawakami-kazuyoshi/items/bd148312815fb75818ee)
+if [ -d $HOME/.anyenv ] ; then
+    export PATH="$HOME/.anyenv/bin:$PATH"
+    eval "$(anyenv init -)"
+    # tmux対応
+    for D in `\ls $HOME/.anyenv/envs`
+    do
+        export PATH="$HOME/.anyenv/envs/$D/bin:$PATH"
+    done
+fi
