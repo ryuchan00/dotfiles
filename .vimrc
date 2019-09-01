@@ -64,3 +64,6 @@ nmap <Esc><Esc> :nohlsearch<CR><Esc>
 
 colorscheme koehler
 syntax on
+
+"　beep音と止めて、画面の点滅もさせない。
+set vb t_vb=

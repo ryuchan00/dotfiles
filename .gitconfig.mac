@@ -1,0 +1,14 @@
+[user]
+	name = ryuchun00
+	email = leokun0210@gmail.com
+[core]
+	excludesfile = /Users/ryuutarou/.gitignore_global
+	autocrlf = input
+[ghq]
+	root = /Users/ryuutarou/workspace
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[include]
+    path = .gitconfig.base
