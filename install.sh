@@ -67,7 +67,7 @@ read answer
 case $answer in
     y)
         avoid_same_file '.tmux.conf'
-        ln -fs $DOTFILES/.tmux.conf
+        ln -fs $DOTFILES/.tmux.conf.$1 ./.tmux.conf
         ;;
     n)
         ;;

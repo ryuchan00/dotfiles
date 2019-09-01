@@ -1,0 +1,12 @@
+# デフォルトのプレフィックスキーはctrl + bだが、シェルの操作とぶつかるので、ctrl + tに変更する
+unbind C-b
+set-option -g prefix C-t
+bind C-t send-prefix
+
+bind ^c new-window
+bind ^t last-window
+bind ^n next-window
+bind ^p previous-window
+
+# bufferの行数を53万にする
+set -g history-limit 530000
