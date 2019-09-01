@@ -1,0 +1,14 @@
+[user]
+	name = ryuchun00
+	email = leokun0210@gmail.com
+[core]
+	excludesfile = /home/votoms//.gitignore_global
+	autocrlf = input
+[ghq]
+	root = /home/votoms/src/
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[include]
+    path = /home/votoms/dotfiles/.gitconfig.base

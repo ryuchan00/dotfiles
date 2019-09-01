@@ -1,0 +1,16 @@
+[user]
+	name = ryuchan00
+	email = yamakawa00@pepabo.com
+[ghq]
+	root = /Users/yamakawa00/src
+[ghq "https://git.pepabo.com/"]
+	vcs = git
+[core]
+	excludesfile = /Users/yamakawa00/.gitignore_global
+	autocrlf = input
+[credential]
+	helper = osxkeychain
+[init]
+	templatedir = ~/.git_template
+[include]
+    path = .gitconfig.basead
