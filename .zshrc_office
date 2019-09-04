@@ -19,7 +19,7 @@ fi
 
 # History
 # ref:https://github.com/june29/dotfiles/blob/master/.zshrc#L83-L84
-HISTFILE=$HOME/Dropbox/dotfiles/.zsh_history
+HISTFILE=$HOME/.zsh_history
 HISTSIZE=530000
 SAVEHIST=530000
 
