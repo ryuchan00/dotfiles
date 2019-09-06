@@ -115,6 +115,8 @@ alias ....='cd ../../..'
 alias va='vagrant'
 alias be='bundle exec'
 
+alias dc='docker-compose'
+
 # cdr: 最近移動したディリクトリに移動する
 autoload -Uz add-zsh-hook
 autoload -Uz chpwd_recent_dirs cdr

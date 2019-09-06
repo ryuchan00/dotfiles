@@ -13,4 +13,4 @@
 [init]
 	templatedir = ~/.git_template
 [include]
-    path = .gitconfig.basead
+    path = /Users/yamakawa00/src/github.com/ryuchan00/dotfiles/.gitconfig.base
