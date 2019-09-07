@@ -5,4 +5,4 @@ function fish_user_key_bindings
 end
 
 #$XDG_DATA_HOME/fish/fish_history が読まれる
-export XDG_DATA_HOME=/home/votoms/Dropbox/
+#export XDG_DATA_HOME=/home/votoms/Dropbox/
