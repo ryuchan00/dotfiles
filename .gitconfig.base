@@ -34,3 +34,4 @@
     cb = "!sh -c 'git branch --merged master | grep -v master | grep -v \"*\" | xargs git branch -d'"
     wip = commit --allow-empty -m 'wip'
     cot = "!sh -c 'git branch --remote | peco | xargs git checkout -t'"
+    pl = "pull"
