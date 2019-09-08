@@ -11,4 +11,4 @@
 	process = git-lfs filter-process
 	required = true
 [include]
-    path = .gitconfig.base
+    path = /Users/ryuutarou/workspace/github.com/yamakawa00/dotfiles/.gitconfig.base
