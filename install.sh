@@ -53,6 +53,8 @@ read answer
 case $answer in
     y)
         avoid_same_file '.zshrc'
+        avoid_same_file '.zshrc.base'
+        ln -fs $DOTFILES/.zshrc.base ./.zshrc.base
         ln -fs $DOTFILES/.zshrc.$1 ./.zshrc
         ;;
     n)
