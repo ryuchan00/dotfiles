@@ -19,3 +19,6 @@ if [ -d $HOME/.anyenv ] ; then
         export PATH="$HOME/.anyenv/envs/$D/bin:$PATH"
     done
 fi
+
+eval "$(starship init zsh)"
+
