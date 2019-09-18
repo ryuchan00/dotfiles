@@ -199,3 +199,4 @@ echo $1 | nkf -w --url-input
 }
 
 export EDITOR=vim
+setopt nonomatch
