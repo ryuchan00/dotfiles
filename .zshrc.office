@@ -20,7 +20,7 @@ if [ -d $HOME/.anyenv ] ; then
     done
 fi
 
-export HISTFILE=~/.zshhistory
+export HISTFILE=~/.zsh_history
 
 eval "$(starship init zsh)"
 
