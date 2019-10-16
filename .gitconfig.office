@@ -14,3 +14,8 @@
 	templatedir = ~/.git_template
 [include]
     path = /Users/yamakawa00/src/github.com/ryuchan00/dotfiles/.gitconfig.base
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
