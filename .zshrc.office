@@ -8,17 +8,8 @@ export PATH="/usr/local/opt/mysql@5.6/bin:$PATH"
 #export PHPENV_ROOT=$HOME/.phpenv
 #export PATH="$PATH:$PHPENV_ROOT/bin"
 
-#if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
+if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 #ref:[anyenvでphpenvとrbenvの共存 - Qiita](https://qiita.com/kawakami-kazuyoshi/items/bd148312815fb75818ee)
-if [ -d $HOME/.anyenv ] ; then
-    export PATH="$HOME/.anyenv/bin:$PATH"
-    eval "$(anyenv init -)"
-    # tmux対応
-    for D in `\ls $HOME/.anyenv/envs`
-    do
-        export PATH="$HOME/.anyenv/envs/$D/bin:$PATH"
-    done
-fi
 
 export HISTFILE=~/.zsh_history
 

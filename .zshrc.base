@@ -202,4 +202,4 @@ export EDITOR=vim
 setopt nonomatch
 
 # BSD版sedをGNU版に置き換える
-export PATH="/usr/local/opt/gnu-sed/libexec/gnubin/:$PATH"
+#export PATH="/usr/local/opt/gnu-sed/libexec/gnubin/:$PATH"
