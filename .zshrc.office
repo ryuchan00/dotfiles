@@ -14,4 +14,5 @@ if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 export HISTFILE=~/.zsh_history
 
 eval "$(starship init zsh)"
-
+setopt hist_ignore_all_dups
+setopt HIST_IGNORE_DUPS

@@ -9,6 +9,7 @@
     graph = log --graph --date-order -C -M --pretty=format:\"<%h> %ad [%an] %Cgreen%d%Creset %s\" --all --date=short
     # ref:https://github.com/kenchan/dotfiles/blob/master/gitconfig#L6
     co = checkout
+    sw = switch
     st = status -sb
     pd = push --delete
     c = commit
