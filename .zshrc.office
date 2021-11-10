@@ -8,15 +8,28 @@ export PATH="/usr/local/opt/mysql@5.6/bin:$PATH"
 #export PHPENV_ROOT=$HOME/.phpenv
 #export PATH="$PATH:$PHPENV_ROOT/bin"
 
-if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
+#if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 #ref:[anyenvでphpenvとrbenvの共存 - Qiita](https://qiita.com/kawakami-kazuyoshi/items/bd148312815fb75818ee)
 
 export HISTFILE=~/.zsh_history
-
-eval "$(starship init zsh)"
 
 # OpenStackクライアントの使用のために必要　
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
+
+if [ -x "`which go`" ]; then
+  export GOPATH=$HOME/go
+  export PATH="$GOPATH/bin:$PATH"
+fi
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
+alias rubymine='/mnt/c/Program\ Files/JetBrains/RubyMine\ 2021.2.2/bin/rubymine64.exe'
+
+fpath=($HOME/.zsh/anyframe(N-/) $fpath)
+autoload -Uz anyframe-init
+anyframe-init
+
+eval "$(starship init zsh)"

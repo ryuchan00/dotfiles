@@ -4,10 +4,6 @@ plugins=(git ruby osx bundler brew emoji-clock zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
 
-# ref: https://qiita.com/mollifier/items/81b18c012d7841ab33c3#1-%E6%89%8B%E5%8B%95%E3%81%A7%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%81%99%E3%82%8B%E5%A0%B4%E5%90%88
-fpath=($HOME/.zsh/anyframe(N-/) $fpath)
-autoload -Uz anyframe-init
-anyframe-init
 
 # tmuxをターミナル起動時に開く
 if [ $SHLVL = 1 ]; then
@@ -92,13 +88,13 @@ zstyle ':vcs_info:*' actionformats '[%b|%a]%c%u'
 # trueにすると formatsという項目で%cと%uというフォーマットが使えるようになる。これは、リポジトリにコミットされていないファイルがあった場合に%cまたは%uに文字列が格納される。
 zstyle ':vcs_info:git:*' check-for-changes true
 
-function _update_prompt() {
-LANG=en_US.UTF-8 vcs_info
-PROMPT="%{$fg[magenta]%}[%T]%{$reset_color%} %{$fg_bold[blue]%}%d %{$fg[red]%}($(rbenv version-name)) %{$fg[green]%}${vcs_info_msg_0_}
-%{$fg_bold[blue]%}$%{$reset_color%} "
-}
+#function _update_prompt() {
+#LANG=en_US.UTF-8 vcs_info
+#PROMPT="%{$fg[magenta]%}[%T]%{$reset_color%} %{$fg_bold[blue]%}%d %{$fg[red]%}($(rbenv version-name)) %{$fg[green]%}${vcs_info_msg_0_}
+#%{$fg_bold[blue]%}$%{$reset_color%} "
+#}
 
-add-zsh-hook precmd _update_prompt
+#add-zsh-hook precmd _update_prompt
 
 # web db press vol83
 alias g='git'
@@ -161,7 +157,7 @@ zle -N peco-kill
 bindkey '^k' peco-kill
 
 # Gitのブランチを切り替える
-bindkey '^_' anyframe-widget-checkout-git-branch
+bindkey '^b' anyframe-widget-checkout-git-branch
 bindkey '^]' anyframe-widget-insert-git-branch
 
 # tmuxとAnythingインターフェースを使ってウィンドウを切り替える
@@ -208,4 +204,5 @@ setopt nonomatch
 setopt hist_ignore_all_dups
 setopt HIST_IGNORE_DUPS
 setopt HIST_IGNORE_SPACE
+
 
