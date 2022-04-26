@@ -8,6 +8,7 @@
 [core]
 	excludesfile = /home/yamakawa00/.gitignore_global
 	autocrlf = input
+	pager = less -cm
 [init]
 	templatedir = ~/.git_template
 [include]

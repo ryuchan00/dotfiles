@@ -14,11 +14,11 @@ export PATH="/usr/local/opt/mysql@5.6/bin:$PATH"
 export HISTFILE=~/.zsh_history
 
 # OpenStackクライアントの使用のために必要　
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
-export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
-
+#export PYENV_ROOT="$HOME/.pyenv"
+#export PATH="$PYENV_ROOT/bin:$PATH"
+#eval "$(pyenv init -)"
+#export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
+#
 if [ -x "`which go`" ]; then
   export GOPATH=$HOME/go
   export PATH="$GOPATH/bin:$PATH"
@@ -26,10 +26,22 @@ fi
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
-alias rubymine='/mnt/c/Program\ Files/JetBrains/RubyMine\ 2021.2.2/bin/rubymine64.exe'
+alias rubymine='/mnt/c/Program\ Files/JetBrains/RubyMine\ 2021.2.3/bin/rubymine64.exe'
 
 fpath=($HOME/.zsh/anyframe(N-/) $fpath)
 autoload -Uz anyframe-init
 anyframe-init
 
 eval "$(starship init zsh)"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# git logの文字化けを防ぐ
+export LESSCHARSET=utf-8
+export LANG=C.UTF-8
+
+if [ -e '/home/yamakawa00/.env' ]; then
+  source '/home/yamakawa00/.env' # 秘匿しなきゃいけないじょうほうはここ
+fi
