@@ -36,3 +36,16 @@
     wip = commit --allow-empty -m 'wip'
     cot = "!sh -c 'git branch --remote | peco | xargs git checkout -t'"
     pl = "pull"
+[ghq]
+	root = /home/yamakawa00/src
+[core]
+	excludesfile = /home/yamakawa00/.gitignore_global
+	autocrlf = input
+	pager = less -cm
+[init]
+	templatedir = ~/.git_template
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true

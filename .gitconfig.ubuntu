@@ -1,14 +1,12 @@
 [user]
 	name = ryuchun00
 	email = leokun0210@gmail.com
-[core]
-	excludesfile = /home/votoms//.gitignore_global
-	autocrlf = input
+# [user]
+#	name = ryuchan00
+#	email = yamakawa00@pepabo.com
 [ghq]
-	root = /home/votoms/src/
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
+	root = /home/yamakawa00/src
+[ghq "https://git.pepabo.com/"]
+	vcs = git
 [include]
-    path = /home/votoms/dotfiles/.gitconfig.base
+	path = /home/yamakawa00/src/github.com/ryuchan00/dotfiles/.gitconfig.base
