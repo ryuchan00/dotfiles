@@ -45,3 +45,7 @@ export LANG=C.UTF-8
 if [ -e '/home/yamakawa00/.env' ]; then
   source '/home/yamakawa00/.env' # 秘匿しなきゃいけないじょうほうはここ
 fi
+export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0.0
+
+function open() { cmd.exe /c start $(wslpath -w $1) }
+alias say='cmd.exe /c %USERPROFILE%/say'
