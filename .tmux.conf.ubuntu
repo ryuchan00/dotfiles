@@ -25,4 +25,5 @@ bind ^p previous-window
 # bufferの行数を53万にする
 set -g history-limit 530000
 
-bind-key -T copy-mode-vi Enter send-keys -X copy-pipe-and-cancel clip.exe
+#bind-key -T copy-mode-vi Enter send-keys -X copy-pipe-and-cancel clip.exe
+bind-key -T copy-mode-vi Enter send-keys -X copy-pipe-and-cancel  "/mnt/c/Windows/System32/clip.exe"
