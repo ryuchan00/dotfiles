@@ -31,7 +31,9 @@ if [ -e '/home/yamakawa00/.env' ]; then
 fi
 export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0.0
 
-function open() { cmd.exe /c start $(wslpath -w $1) }
+function open() {
+  cmd.exe /c start $(wslpath -w $1) > /dev/null 2>&1
+}
 alias say='cmd.exe /c %USERPROFILE%/say'
 
 export WIN_USERNAME=$(powershell.exe '$env:USERNAME' | sed -e 's/\r//g')
