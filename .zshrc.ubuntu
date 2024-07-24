@@ -8,8 +8,6 @@ if [ -x "`which go`" ]; then
   export PATH="$GOPATH/bin:$PATH"
 fi
 export PATH="$HOME/.local/bin:$PATH"
-export PATH="$HOME/.rbenv/bin:$PATH"
-eval "$(rbenv init -)"
 alias rubymine='/mnt/c/Program\ Files/JetBrains/RubyMine\ 2022.1/bin/rubymine64.exe'
 
 fpath=($HOME/.zsh/anyframe(N-/) $fpath)
