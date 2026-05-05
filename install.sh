@@ -94,3 +94,20 @@ n) ;;
     echo -e "cannot understand $answer."
     ;;
 esac
+
+echo "update nvim config?[Y/n]"
+read answer
+case $answer in
+[Yy]*)
+    if [[ -d ~/.config/nvim && ! -L ~/.config/nvim ]]; then
+        mv ~/.config/nvim dotfile_history/nvim_$now
+    fi
+    mkdir -p ~/.config
+    ln -fns $DOTFILES/nvim ~/.config/nvim
+    ;;
+n) ;;
+
+*)
+    echo -e "cannot understand $answer."
+    ;;
+esac

@@ -1,33 +1,53 @@
-export ZSH=$HOME/.oh-my-zsh
+zstyle ':omz:update' mode auto
+zstyle ':omz:update' frequency 1
 
-plugins=(git ruby bundler brew emoji-clock zsh-syntax-highlighting)
+export ZSH=$HOME/.oh-my-zsh
+source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+plugins=(git brew emoji-clock zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
 
+# anyframe
+fpath=($HOME/.zsh/anyframe(N-/) $fpath)
+autoload -Uz anyframe-init
+anyframe-init
 
-# tmuxをターミナル起動時に4分割で開く（無効化: 自動起動しない）
-# if [ $SHLVL = 1 ]; then
-#   tmux new-session \; source-file ~/.tmux.session.conf
-# fi
+
+# tmuxをターミナル起動時に開く
+if [ $SHLVL = 1 ]; then
+    # tmuxにセッションがなかったら新規セッションを立ち上げた際に分割処理設定を読み込む
+    alias tmux="tmux -2 new-session \; source-file ~/.tmux/new-session"
+fi
+
+if [ $SHLVL = 1 ]; then
+    tmux
+fi
 
 # キーのリピート入力認識までの時間とキーリピート時間の確認
 # ref:https://dev.classmethod.jp/tool/mac-keyboard-speed-2/
 
 # History
 # ref:https://github.com/june29/dotfiles/blob/master/.zshrc#L83-L84
-HISTFILE=$HOME/.zsh_history
+HISTFILE=~/.zsh_history
 HISTSIZE=530000
 SAVEHIST=530000
+HISTCONTROL=ignorespace
 
-
-function fzf-select-history() {
- BUFFER=$(\history -n 1 | tail -r | awk '!seen[$0]++' | \
-     fzf --tiebreak=chunk,begin,index --query "$LBUFFER")
+function peco-select-history() {
+ local tac
+ if which tac > /dev/null; then
+     tac="tac"
+ else
+     tac="tail -r"
+ fi
+ BUFFER=$(\history -n 1 | \
+     eval $tac | \
+     peco --query "$LBUFFER")
  CURSOR=$#BUFFER
- zle reset-prompt
+ # zle clear-screen
 }
-zle -N fzf-select-history
-bindkey '^r' fzf-select-history
+zle -N peco-select-history
+bindkey '^r' peco-select-history
 
 # search zsh man
 # usage ---
@@ -36,17 +56,29 @@ function zman() {
  PAGER="less -g -s '+/^ {7}"$1"'" man zshall
 }
 
-# ctrl + g でghq管理下のファイルを開く
-function fzf-src () {
-local selected_dir=$(ghq list -p | fzf --query "$LBUFFER")
+# ctrl + \ でghq管理下のファイルを開く
+function peco-src () {
+local selected_dir=$(ghq list -p | peco --query "$LBUFFER")
 if [ -n "$selected_dir" ]; then
  BUFFER="cd ${selected_dir}"
  zle accept-line
 fi
+# zle clear-screen
 }
-zle -N fzf-src
-bindkey '^g' fzf-src
+zle -N peco-src
+bindkey '^\' peco-src
 
+# ctrl + ^ でghq管理下のファイルをatomで開く
+function peco-atom () {
+local selected_dir=$(ghq list -p | peco --query "$LBUFFER")
+if [ -n "$selected_dir" ]; then
+ BUFFER="atom ${selected_dir}"
+ zle accept-line
+fi
+# zle clear-screen
+}
+zle -N peco-atom
+bindkey '^^' peco-atom
 
 # Prompt
 # ref:https://github.com/kenchan/dotfiles/blob/master/dot.zshrc#L9-L18
@@ -93,23 +125,24 @@ alias va='vagrant'
 alias be='bundle exec'
 
 alias dc='docker-compose'
+alias dcon='docker container'
 
 # cdr: 最近移動したディリクトリに移動する
 autoload -Uz add-zsh-hook
 autoload -Uz chpwd_recent_dirs cdr
 add-zsh-hook chpwd chpwd_recent_dirs
 
-# cdrをfzfで開く
+# cdrをpecoで開く
 # ref: http://wada811.blogspot.com/2014/09/zsh-cdr.html
-function fzf-cdr() {
- local selected_dir=$(cdr -l | awk '{ print $2 }' | fzf --tac --no-sort)
+function peco-cdr() {
+ local selected_dir=$(cdr -l | awk '{ print $2 }' | peco)
  if [ -n "$selected_dir" ]; then
      BUFFER="cd ${selected_dir}"
      zle accept-line
  fi
 }
-zle -N fzf-cdr
-bindkey '^l' fzf-cdr
+zle -N peco-cdr
+bindkey '^l' peco-cdr
 
 # recent-dirs-max: 履歴として保存するディレクトリ、0か負の値で無制限になる
 zstyle ':chpwd:*' recent-dirs-max 200
@@ -126,78 +159,57 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 # zmv: 複数のファイルを一括でリネームする
 autoload -Uz zmv
 
-# fzfを使ってプロセスを停止する
-function fzf-kill() {
-local pid=$(ps -u $USER -o pid,stat,%cpu,%mem,cputime,command \
-| fzf --header-lines=1 \
-| awk '{print $1}')
-if [ -n "$pid" ]; then
- kill $pid
-fi
+# anyframeを使ってプロセスを停止する
+# ref: https://qiita.com/mollifier/items/81b18c012d7841ab33c3
+function peco-kill() {
+ps -u $USER -o pid,stat,%cpu,%mem,cputime,command \
+| anyframe-selector-auto \
+| awk '{print $1}' \
+| anyframe-action-execute kill
 }
-zle -N fzf-kill
-bindkey '^k' fzf-kill
+zle -N peco-kill
+bindkey '^k' peco-kill
 
-# Gitのブランチを切り替える（zsh標準のselectを使用）
-function select-checkout-git-branch() {
-  local branches branch
-  branches=$(git branch --sort=-committerdate 2>/dev/null | sed 's/^[* ]*//')
-  if [ -z "$branches" ]; then
-    echo "gitリポジトリではない"
-    return 1
-  fi
-  echo "ブランチを選択:"
-  select branch in $=branches; do
-    if [ -n "$branch" ]; then
-      git checkout "$branch"
-      break
-    fi
-  done
-}
-alias gco='select-checkout-git-branch'
+# ref: https://pocke.hatenablog.com/entry/2014/07/18/203411
+#function peco-kill-process()
+#{
+#  local ps_cmd='ps aux'
+#  local get_pid_cmd='sed -E s/^\S+\s+([0-9]+).+$/\1/'
+#  local ps_line="$(${=ps_cmd} | peco)"
+#
+#  if [ -z $ps_line ]; then
+#    return 1
+#  fi
+#
+#  local pid="$(echo "${ps_line}" | ${=get_pid_cmd})"
+#  kill -9 $pid
+#  zle clear-screen
+#}
+#zle -N peco-kill-process
+#bindkey '^k' peco-kill-process
 
-# ctrl + n でfzfを使ってgitブランチを切り替える
-function fzf-checkout-git-branch() {
-  local branch
-  branch=$(git branch --sort=-committerdate 2>/dev/null | sed 's/^[* ]*//' | fzf --query "$LBUFFER")
-  if [ -n "$branch" ]; then
-    BUFFER="git checkout ${branch}"
+# Gitのブランチを切り替える
+function checkout-git-branch() {
+    git checkout $(git branch | sed 's/*//g' | sed 's/ //g' | peco)
     zle accept-line
-  fi
 }
-zle -N fzf-checkout-git-branch
-bindkey '^n' fzf-checkout-git-branch
+zle -N checkout-git-branch
 
-# Gitのブランチ名を挿入する（zsh標準のselectを使用）
-function select-insert-git-branch() {
-  local branches branch
-  branches=$(git branch --sort=-committerdate 2>/dev/null | sed 's/^[* ]*//')
-  if [ -z "$branches" ]; then
-    echo "gitリポジトリではない"
-    return 1
-  fi
-  echo "ブランチを選択:"
-  select branch in $=branches; do
-    if [ -n "$branch" ]; then
-      LBUFFER+="$branch"
-      break
-    fi
-  done
-  zle reset-prompt
-}
-zle -N select-insert-git-branch
-bindkey '^]' select-insert-git-branch
+#bindkey '^b' anyframe-widget-checkout-git-branch
+bindkey '^n' checkout-git-branch
+bindkey '^]' anyframe-widget-insert-git-branch
 
-# tmuxとfzfを使ってウィンドウを切り替える
-function fzf-tmux() {
+# tmuxとAnythingインターフェースを使ってウィンドウを切り替える
+function peco-tmux() {
+local i=$(tmux lsw | awk '/active.$/ {print NR-1}')
 local f='#{window_index}: #{window_name}#{window_flags} #{pane_current_path}'
-local target=$(tmux lsw -F "$f" | fzf | cut -d ':' -f 1)
-if [ -n "$target" ]; then
- tmux select-window -t "$target"
-fi
+tmux lsw -F "$f" \
+ | anyframe-selector-auto "" --initial-index $i \
+ | cut -d ':' -f 1 \
+ | anyframe-action-execute tmux select-window -t
 }
-zle -N fzf-tmux
-bindkey '^xw' fzf-tmux
+zle -N peco-tmux
+bindkey '^xw' peco-tmux
 
 #bindkey '^t' forward-word
 #bindkey '^g' backward-word
@@ -229,7 +241,15 @@ setopt nonomatch
 #export PATH="/usr/local/opt/gnu-sed/libexec/gnubin/:$PATH"
 
 setopt hist_ignore_all_dups
-setopt HIST_SAVE_NO_DUPS
+setopt HIST_IGNORE_DUPS
 setopt HIST_IGNORE_SPACE
 
+# エラーはhistoryに記録しない
+zshaddhistory() {
+  [[ "$?" == 0 ]]
+}
 
+# 個人設定の読み込み
+if [ -f ~/.zshrc.local ]; then
+  source ~/.zshrc.local
+fi
