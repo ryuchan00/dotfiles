@@ -1,3 +1,6 @@
+# UTF-8を有効にする
+set -gq allow-passthrough on
+
 # デフォルトのプレフィックスキーはctrl + bだが、シェルの操作とぶつかるので、ctrl + tに変更する
 unbind C-b
 set-option -g prefix C-t
@@ -8,11 +11,11 @@ setw -g mode-keys vi
 
 # 'v' で選択を始める
 bind-key -T copy-mode-vi v send-keys -X begin-selection
-bind-key -T copy-mode-vi y send-keys -X copy-pipe-and-cancel clip.exe
+bind-key -T copy-mode-vi y send-keys -X copy-pipe-and-cancel "xclip -selection clipboard"
 
 # `Enter` でもcopy-pipeを使う
 unbind -T copy-mode-vi Enter
-bind-key -T copy-mode-vi Enter send-keys -X copy-pipe-and-cancel "reattach-to-user-namespace pbcopy"
+bind-key -T copy-mode-vi Enter send-keys -X copy-pipe-and-cancel "xclip -selection clipboard"
 
 # ']' でpbpasteを使う
 #bind ] run "reattach-to-user-namespace pbpaste | tmux load-buffer - && tmux paste-buffer"
@@ -26,4 +29,35 @@ bind ^p previous-window
 set -g history-limit 530000
 
 #bind-key -T copy-mode-vi Enter send-keys -X copy-pipe-and-cancel clip.exe
-bind-key -T copy-mode-vi Enter send-keys -X copy-pipe-and-cancel  "/mnt/c/Windows/System32/clip.exe"
+#bind-key -T copy-mode-vi Enter send-keys -X copy-pipe-and-cancel "iconv -t UTF-16LE | /mnt/c/Windows/System32/clip.exe"
+
+# マウススクロールを有効にする
+set -g mouse on
+
+# Vim style pane navigation
+bind h select-pane -L
+bind j select-pane -D
+bind k select-pane -U
+bind l select-pane -R
+
+# Pane resize with Shift+hjkl
+bind H resize-pane -L 5
+bind J resize-pane -D 5
+bind K resize-pane -U 5
+bind L resize-pane -R 5
+
+# 256 color terminal
+set -g default-terminal "tmux-256color"
+set -ga terminal-overrides ",xterm-256color:Tc"
+
+# Low escape time for vim
+set -s escape-time 0
+
+# Start window/pane index at 1
+set -g base-index 1
+setw -g pane-base-index 1
+
+# Split panes in current directory
+bind '"' split-window -v -c "#{pane_current_path}"
+bind % split-window -h -c "#{pane_current_path}"
+bind ^c new-window -c "#{pane_current_path}"

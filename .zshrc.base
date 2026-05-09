@@ -7,7 +7,7 @@ source $ZSH/oh-my-zsh.sh
 
 # tmuxをターミナル起動時に開く
 if [ $SHLVL = 1 ]; then
-tmux
+tmux -u
 fi
 
 # キーのリピート入力認識までの時間とキーリピート時間の確認
@@ -21,7 +21,7 @@ SAVEHIST=530000
 HISTCONTROL=ignorespace 
 
 
-function peco-select-history() {
+function fzf-select-history() {
  local tac
  if which tac > /dev/null; then
      tac="tac"
@@ -30,12 +30,11 @@ function peco-select-history() {
  fi
  BUFFER=$(\history -n 1 | \
      eval $tac | \
-     peco --query "$LBUFFER")
+     fzf --query "$LBUFFER")
  CURSOR=$#BUFFER
- # zle clear-screen
 }
-zle -N peco-select-history
-bindkey '^r' peco-select-history
+zle -N fzf-select-history
+bindkey '^r' fzf-select-history
 
 # search zsh man
 # usage ---
@@ -45,28 +44,26 @@ function zman() {
 }
 
 # ctrl + \ でghq管理下のファイルを開く
-function peco-src () {
-local selected_dir=$(ghq list -p | peco --query "$LBUFFER")
+function fzf-src () {
+local selected_dir=$(ghq list -p | fzf --query "$LBUFFER")
 if [ -n "$selected_dir" ]; then
  BUFFER="cd ${selected_dir}"
  zle accept-line
 fi
-# zle clear-screen
 }
-zle -N peco-src
-bindkey '^\' peco-src
+zle -N fzf-src
+bindkey '^\' fzf-src
 
-# ctrl + ^ でghq管理下のファイルをatomで開く
-function peco-atom () {
-local selected_dir=$(ghq list -p | peco --query "$LBUFFER")
+# ctrl + ^ でghq管理下のファイルをcodeで開く
+function fzf-code () {
+local selected_dir=$(ghq list -p | fzf --query "$LBUFFER")
 if [ -n "$selected_dir" ]; then
- BUFFER="atom ${selected_dir}"
+ BUFFER="code ${selected_dir}"
  zle accept-line
 fi
-# zle clear-screen
 }
-zle -N peco-atom
-bindkey '^^' peco-atom
+zle -N fzf-code
+bindkey '^^' fzf-code
 
 # Prompt
 # ref:https://github.com/kenchan/dotfiles/blob/master/dot.zshrc#L9-L18
@@ -119,17 +116,16 @@ autoload -Uz add-zsh-hook
 autoload -Uz chpwd_recent_dirs cdr
 add-zsh-hook chpwd chpwd_recent_dirs
 
-# cdrをpecoで開く
-# ref: http://wada811.blogspot.com/2014/09/zsh-cdr.html
-function peco-cdr() {
- local selected_dir=$(cdr -l | awk '{ print $2 }' | peco)
+# cdrをfzfで開く
+function fzf-cdr() {
+ local selected_dir=$(cdr -l | awk '{ print $2 }' | fzf)
  if [ -n "$selected_dir" ]; then
      BUFFER="cd ${selected_dir}"
      zle accept-line
  fi
 }
-zle -N peco-cdr
-bindkey '^l' peco-cdr
+zle -N fzf-cdr
+bindkey '^l' fzf-cdr
 
 # recent-dirs-max: 履歴として保存するディレクトリ、0か負の値で無制限になる
 zstyle ':chpwd:*' recent-dirs-max 200
@@ -146,31 +142,48 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 # zmv: 複数のファイルを一括でリネームする
 autoload -Uz zmv
 
-# anyframeを使ってプロセスを停止する
-function peco-kill() {
-ps -u $USER -o pid,stat,%cpu,%mem,cputime,command \
-| anyframe-selector-auto \
-| awk '{print $1}' \
-| anyframe-action-execute kill
+# プロセスを停止する
+function fzf-kill() {
+local pid=$(ps -u $USER -o pid,stat,%cpu,%mem,cputime,command \
+| fzf --header-lines=1 \
+| awk '{print $1}')
+if [ -n "$pid" ]; then
+ kill $pid
+fi
 }
-zle -N peco-kill
-bindkey '^k' peco-kill
+zle -N fzf-kill
+bindkey '^k' fzf-kill
 
 # Gitのブランチを切り替える
-bindkey '^b' anyframe-widget-checkout-git-branch
-bindkey '^]' anyframe-widget-insert-git-branch
-
-# tmuxとAnythingインターフェースを使ってウィンドウを切り替える
-function peco-tmux() {
-local i=$(tmux lsw | awk '/active.$/ {print NR-1}')
-local f='#{window_index}: #{window_name}#{window_flags} #{pane_current_path}'
-tmux lsw -F "$f" \
- | anyframe-selector-auto "" --initial-index $i \
- | cut -d ':' -f 1 \
- | anyframe-action-execute tmux select-window -t
+function fzf-checkout-git-branch() {
+ local branch=$(git branch | sed 's/^[* ]*//' | fzf)
+ if [ -n "$branch" ]; then
+     BUFFER="git checkout ${branch}"
+     zle accept-line
+ fi
 }
-zle -N peco-tmux
-bindkey '^xw' peco-tmux
+zle -N fzf-checkout-git-branch
+bindkey '^b' fzf-checkout-git-branch
+
+function fzf-insert-git-branch() {
+ local branch=$(git branch -a | sed 's/^[* ]*//' | fzf)
+ if [ -n "$branch" ]; then
+     LBUFFER+="$branch"
+ fi
+}
+zle -N fzf-insert-git-branch
+bindkey '^]' fzf-insert-git-branch
+
+# tmuxウィンドウを切り替える
+function fzf-tmux-window() {
+local f='#{window_index}: #{window_name}#{window_flags} #{pane_current_path}'
+local window=$(tmux lsw -F "$f" | fzf | cut -d ':' -f 1)
+if [ -n "$window" ]; then
+ tmux select-window -t "$window"
+fi
+}
+zle -N fzf-tmux-window
+bindkey '^xw' fzf-tmux-window
 
 #bindkey '^t' forward-word
 #bindkey '^g' backward-word
@@ -205,4 +218,4 @@ setopt hist_ignore_all_dups
 setopt HIST_IGNORE_DUPS
 setopt HIST_IGNORE_SPACE
 
-
+setopt hist_ignore_dups
