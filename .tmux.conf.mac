@@ -59,14 +59,17 @@ set -g window-active-style 'fg=colour255,bg=terminal'
 set -g pane-border-style 'fg=colour238,bg=colour236'
 set -g pane-active-border-style 'fg=colour51,bg=terminal'
 
-# Claude Code hook可視化用: ボーダー上部にアラートまたはコマンド名を表示
-# @pane-alertがセットされたペインだけ🔔付きの目立つラベルを表示する
+# Claude Code hook可視化 + ペインごとの枠色をボーダー上部に表示する
+# ペイン固有色@pcで「[番号] (🔔アラート or 現在のコマンド名)」を描く
+# 非アクティブも色で見分けられ、アクティブペインは太線で強調する
 set -g pane-border-status top
-set -g pane-border-format ' #{?@pane-alert,🔔 #{@pane-alert},#{pane_current_command}} '
+set -g pane-border-format '#[fg=#{@pc}]#{?pane_active,━━,──}[#{pane_index}] #{?@pane-alert,🔔 #{@pane-alert},#{pane_current_command}} #{?pane_active,━━━━━━━━━━━━━━━━━━━━,────────────────────}'
 
 # フォーカスが戻ったpaneの🔔マーキングを自動リセットする
 set-hook -g after-select-pane[0] 'set-option -p -u @pane-alert'
 set-hook -g after-select-pane[1] 'set -w -u window-status-style'
+# 選択されたペインの枠線を、そのペイン固有色@pcに塗り替える(非アクティブは共通色のまま)
+set-hook -g after-select-pane[2] 'set-window-option pane-active-border-style "fg=#{@pc},bg=terminal"'
 
 # プラグイン管理 (TPM)
 set -g @plugin 'tmux-plugins/tpm'
@@ -79,6 +82,17 @@ set -g @continuum-save-interval '15'
 
 # resurrect: ペインの内容も保存
 set -g @resurrect-capture-pane-contents 'on'
+
+# 新規ペイン/ウィンドウ作成時に、そのペインへ固有色を自動割り当てする
+set-hook -g after-split-window 'run-shell "~/.config/tmux/assign-pane-color.sh #{pane_id}"'
+set-hook -g after-new-window 'run-shell "~/.config/tmux/assign-pane-color.sh #{pane_id}"'
+
+# ステータスを2行にし、2行目にアクティブペインのカレントディレクトリ(フルパス)を表示する
+set -g status 2
+set -g status-format[1] '#[align=left,fg=black] #{pane_current_path}'
+
+# 既存の全ペインへ固有色を一括割り当てする(source-file 時にも振り直す)
+run-shell '~/.config/tmux/assign-pane-color.sh'
 
 # TPM初期化（この行は必ず.tmux.confの最後に置く）
 run '~/.tmux/plugins/tpm/tpm'
