@@ -111,3 +111,20 @@ n) ;;
     echo -e "cannot understand $answer."
     ;;
 esac
+
+echo "update tmux config?[Y/n]"
+read answer
+case $answer in
+[Yy]*)
+    if [[ -d ~/.config/tmux && ! -L ~/.config/tmux ]]; then
+        mv ~/.config/tmux dotfile_history/tmux_$now
+    fi
+    mkdir -p ~/.config
+    ln -fns $DOTFILES/tmux ~/.config/tmux
+    ;;
+n) ;;
+
+*)
+    echo -e "cannot understand $answer."
+    ;;
+esac
