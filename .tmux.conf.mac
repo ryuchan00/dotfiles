@@ -1,5 +1,7 @@
-# Mac OS X pasteboardを使用できるようにする
-set-option -g default-command "reattach-to-user-namespace -l zsh"
+# Mac OS X pasteboard連携
+# reattach-to-user-namespace はSierra(10.12)以降不要なので外している
+# Ghostty等のモダンターミナル向けに OSC52 でもクリップボードへ書き込む
+set -g set-clipboard on
 
 # デフォルトのプレフィックスキーはctrl + bだが、シェルの操作とぶつかるので、ctrl + tに変更する
 unbind C-b
@@ -9,16 +11,42 @@ bind C-t send-prefix
 # コピーモードでvimキーバインドを使う
 setw -g mode-keys vi
 
+# Esc単体の待ち時間をなくす
+# デフォルト500msはEsc/矢印キーのシーケンス判定用の猶予で、コピーモードの操作が引っかかる
+set -sg escape-time 0
+# キーリピート中の描画を間引かずに追従させる
+set -g repeat-time 300
+
+# コピーモードで大きく飛ぶ
+bind-key -T copy-mode-vi C-j send-keys -X -N 5 cursor-down
+bind-key -T copy-mode-vi C-k send-keys -X -N 5 cursor-up
+bind-key -T copy-mode-vi C-h send-keys -X -N 10 cursor-left
+bind-key -T copy-mode-vi C-l send-keys -X -N 10 cursor-right
+
 # 'v' で選択を始める
 bind-key -T copy-mode-vi v send-keys -X begin-selection
-bind-key -T copy-mode-vi y send-keys -X copy-pipe "reattach-to-user-namespace pbcopy"
+# LC_ALL=ja_JP.UTF-8 を明示しないと、tmux サーバの LC_CTYPE 未設定状態で
+# pbcopy が UTF-8 マルチバイト入力を空書き込み / 途中切りで処理してしまう
+# copy-pipe(-and-cancel なし)にすることで、複数箇所コピー時に
+# コピーモードを抜けずカーソル位置に留まる。抜けたいときは Enter を使う
+bind-key -T copy-mode-vi y send-keys -X copy-pipe "LC_ALL=ja_JP.UTF-8 pbcopy"
 
 # `Enter` でもcopy-pipeを使う
 unbind -T copy-mode-vi Enter
-bind-key -T copy-mode-vi Enter send-keys -X copy-pipe-and-cancel "reattach-to-user-namespace pbcopy"
+bind-key -T copy-mode-vi Enter send-keys -X copy-pipe-and-cancel "LC_ALL=ja_JP.UTF-8 pbcopy"
+
+# マウスドラッグ/ダブルクリック/トリプルクリックでもクリップボードへ
+# tmuxデフォルトはコピーパイプ先指定なしでシステムクリップボードへ送られないため明示する
+bind-key -T copy-mode-vi MouseDragEnd1Pane send-keys -X copy-pipe-and-cancel "LC_ALL=ja_JP.UTF-8 pbcopy"
+bind-key -T copy-mode-vi DoubleClick1Pane \
+    select-pane \; send-keys -X select-word \; \
+    run-shell -d 0.3 \; send-keys -X copy-pipe-and-cancel "LC_ALL=ja_JP.UTF-8 pbcopy"
+bind-key -T copy-mode-vi TripleClick1Pane \
+    select-pane \; send-keys -X select-line \; \
+    run-shell -d 0.3 \; send-keys -X copy-pipe-and-cancel "LC_ALL=ja_JP.UTF-8 pbcopy"
 
 # ']' でpbpasteを使う
-bind ] run "reattach-to-user-namespace pbpaste | tmux load-buffer - && tmux paste-buffer"
+bind ] run "LC_ALL=ja_JP.UTF-8 pbpaste | tmux load-buffer - && tmux paste-buffer"
 
 # 新しいウィンドウ・ペインを現在のディレクトリで開く
 bind ^c new-window -c "#{pane_current_path}"
