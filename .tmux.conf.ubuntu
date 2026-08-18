@@ -8,7 +8,8 @@ setw -g mode-keys vi
 
 # 'v' で選択を始める
 bind-key -T copy-mode-vi v send-keys -X begin-selection
-bind-key -T copy-mode-vi y send-keys -X copy-pipe-and-cancel clip.exe
+# clip.exe は UTF-16LE を期待するため、iconv で変換してから渡す (日本語の文字化け対策)
+bind-key -T copy-mode-vi y send-keys -X copy-pipe-and-cancel "iconv -f utf-8 -t utf-16le | clip.exe"
 
 # `Enter` でもcopy-pipeを使う
 unbind -T copy-mode-vi Enter
@@ -22,8 +23,14 @@ bind ^t last-window
 bind ^n next-window
 bind ^p previous-window
 
+# hjklでペイン移動
+bind h select-pane -L
+bind j select-pane -D
+bind k select-pane -U
+bind l select-pane -R
+
 # bufferの行数を53万にする
 set -g history-limit 530000
 
 #bind-key -T copy-mode-vi Enter send-keys -X copy-pipe-and-cancel clip.exe
-bind-key -T copy-mode-vi Enter send-keys -X copy-pipe-and-cancel  "/mnt/c/Windows/System32/clip.exe"
+bind-key -T copy-mode-vi Enter send-keys -X copy-pipe-and-cancel "iconv -f utf-8 -t utf-16le | /mnt/c/Windows/System32/clip.exe"
