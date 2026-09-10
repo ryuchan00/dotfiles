@@ -1,3 +1,4 @@
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 [ -f ~/.zshrc.base ] && source ~/.zshrc.base
 
 export PATH="/usr/local/opt/mysql@5.6/bin:$PATH"
@@ -34,5 +35,13 @@ function open() {
 }
 alias say='cmd.exe /c %USERPROFILE%/say'
 
-export WIN_USERNAME=$(powershell.exe '$env:USERNAME' | sed -e 's/\r//g')
-export WIN_USERHOME=/mnt/c/Users/$WIN_USERNAME
+# Windows 側のユーザーホーム。powershell.exe だとプロファイルが読み込まれて
+# 起動が遅く、PSReadLine のエラーが zsh の画面に混ざるので cmd.exe を使う
+WIN_USERPROFILE=$(cmd.exe /c 'echo %USERPROFILE%' 2>/dev/null | tr -d '\r')
+export WIN_USERHOME=$(wslpath -u "$WIN_USERPROFILE")
+export WIN_USERNAME=${WIN_USERHOME:t}
+unset WIN_USERPROFILE
+
+if command -v tmux &>/dev/null && [ -z "$TMUX" ]; then
+  tmux attach-session -t default 2>/dev/null || tmux new-session -s default
+fi
