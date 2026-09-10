@@ -107,3 +107,17 @@ set -g status-format[1] '#[align=left,fg=black] #{pane_current_path}'
 
 # 既存の全ペインへ固有色を一括割り当てする(source-file 時にも振り直す)
 run-shell '~/.config/tmux/assign-pane-color.sh'
+
+run-shell '~/clone/path/sidebar.tmux'
+
+# tmuxのセッション/ウィンドウ/ペインのレイアウトを保存・復元する
+set -g @plugin 'tmux-plugins/tpm'
+set -g @plugin 'tmux-plugins/tmux-resurrect'
+set -g @plugin 'tmux-plugins/tmux-continuum'
+# tmux起動時に自動でセッションを復元する
+set -g @continuum-restore 'on'
+# resurrectの自動保存間隔(分)。continuumが内部で使う
+set -g @continuum-save-interval '15'
+
+# tpm本体の初期化。必ずtmux.conf最後に書く
+run '~/.tmux/plugins/tpm/tpm'
