@@ -1,1 +1,9 @@
 .idea
+
+# ビルド成果物・動作確認用の一時ファイル
+a.out
+test.cpp
+test2.cpp
+
+# Claude Code のローカル設定 (マシン固有のため共有しない)
+.claude/settings.local.json

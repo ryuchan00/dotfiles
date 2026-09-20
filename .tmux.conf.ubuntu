@@ -6,31 +6,118 @@ bind C-t send-prefix
 # コピーモードでvimキーバインドを使う
 setw -g mode-keys vi
 
+# Esc単体の待ち時間をなくす
+# デフォルト500msはEsc/矢印キーのシーケンス判定用の猶予で、コピーモードの操作が引っかかる
+set -sg escape-time 0
+# キーリピート中の描画を間引かずに追従させる
+set -g repeat-time 300
+
+# コピーモードで大きく飛ぶ
+bind-key -T copy-mode-vi C-j send-keys -X -N 5 cursor-down
+bind-key -T copy-mode-vi C-k send-keys -X -N 5 cursor-up
+bind-key -T copy-mode-vi C-h send-keys -X -N 10 cursor-left
+bind-key -T copy-mode-vi C-l send-keys -X -N 10 cursor-right
+
 # 'v' で選択を始める
 bind-key -T copy-mode-vi v send-keys -X begin-selection
 # clip.exe は UTF-16LE を期待するため、iconv で変換してから渡す (日本語の文字化け対策)
-bind-key -T copy-mode-vi y send-keys -X copy-pipe-and-cancel "iconv -f utf-8 -t utf-16le | clip.exe"
+bind-key -T copy-mode-vi y send-keys -X copy-pipe "iconv -f utf-8 -t utf-16le | clip.exe"
 
 # `Enter` でもcopy-pipeを使う
 unbind -T copy-mode-vi Enter
-bind-key -T copy-mode-vi Enter send-keys -X copy-pipe-and-cancel "reattach-to-user-namespace pbcopy"
+bind-key -T copy-mode-vi Enter send-keys -X copy-pipe-and-cancel "iconv -f utf-8 -t utf-16le | clip.exe"
 
-# ']' でpbpasteを使う
-#bind ] run "reattach-to-user-namespace pbpaste | tmux load-buffer - && tmux paste-buffer"
+# マウスドラッグ/ダブルクリック/トリプルクリックでもクリップボードへ
+bind-key -T copy-mode-vi MouseDragEnd1Pane send-keys -X copy-pipe-and-cancel "iconv -f utf-8 -t utf-16le | clip.exe"
+bind-key -T copy-mode-vi DoubleClick1Pane \
+    select-pane \; send-keys -X select-word \; \
+    run-shell -d 0.3 \; send-keys -X copy-pipe-and-cancel "iconv -f utf-8 -t utf-16le | clip.exe"
+bind-key -T copy-mode-vi TripleClick1Pane \
+    select-pane \; send-keys -X select-line \; \
+    run-shell -d 0.3 \; send-keys -X copy-pipe-and-cancel "iconv -f utf-8 -t utf-16le | clip.exe"
 
-bind ^c new-window
+# ']' でWindowsクリップボードから貼り付け (PowerShellのGet-Clipboard経由)
+bind ] run "powershell.exe -NoProfile -Command Get-Clipboard | tmux load-buffer - && tmux paste-buffer"
+
+# 新しいウィンドウ・ペインを現在のディレクトリで開く
+bind ^c new-window -c "#{pane_current_path}"
+bind '"' split-window -c "#{pane_current_path}"
+bind '%' split-window -h -c "#{pane_current_path}"
 bind ^t last-window
 bind ^n next-window
 bind ^p previous-window
 
-# hjklでペイン移動
+# マウス操作を有効にする（スクロール、ペイン選択、リサイズ等）
+set -g mouse on
+
+# ペイン移動: vimキーバインド
 bind h select-pane -L
 bind j select-pane -D
 bind k select-pane -U
 bind l select-pane -R
 
+# ペイン移動: アローキー
+bind Left select-pane -L
+bind Down select-pane -D
+bind Up select-pane -U
+bind Right select-pane -R
+
+# ペインリサイズ: vimキーバインド（大文字）
+bind -r H resize-pane -L 5
+bind -r J resize-pane -D 5
+bind -r K resize-pane -U 5
+bind -r L resize-pane -R 5
+
 # bufferの行数を53万にする
 set -g history-limit 530000
 
-#bind-key -T copy-mode-vi Enter send-keys -X copy-pipe-and-cancel clip.exe
-bind-key -T copy-mode-vi Enter send-keys -X copy-pipe-and-cancel "iconv -f utf-8 -t utf-16le | /mnt/c/Windows/System32/clip.exe"
+# alternate screen bufferを無効化し、フルスクリーンTUIアプリ(Claude Codeなど)の
+# 描画内容も通常のスクロールバックに記録されるようにする
+set-window-option -g alternate-screen off
+
+# フォーカスイベントを有効にする
+set -g focus-events on
+
+# アクティブペインと非アクティブペインの色分け
+# 非アクティブ: テキストも暗くして明確に区別
+set -g window-style 'fg=colour245,bg=colour236'
+set -g window-active-style 'fg=colour255,bg=terminal'
+set -g pane-border-style 'fg=colour238,bg=colour236'
+set -g pane-active-border-style 'fg=colour51,bg=terminal'
+
+# Claude Code hook可視化 + ペインごとの枠色をボーダー上部に表示する
+# ペイン固有色@pcで「[番号] (🔔アラート or 現在のコマンド名)」を描く
+# 非アクティブも色で見分けられ、アクティブペインは太線で強調する
+set -g pane-border-status top
+set -g pane-border-format '#[fg=#{@pc}]#{?pane_active,━━,──}[#{pane_index}] #{?@pane-alert,🔔 #{@pane-alert},#{pane_current_command}} #{?pane_active,━━━━━━━━━━━━━━━━━━━━,────────────────────}'
+
+# フォーカスが戻ったpaneの🔔マーキングを自動リセットする
+set-hook -g after-select-pane[0] 'set-option -p -u @pane-alert'
+set-hook -g after-select-pane[1] 'set -w -u window-status-style'
+# 選択されたペインの枠線を、そのペイン固有色@pcに塗り替える(非アクティブは共通色のまま)
+set-hook -g after-select-pane[2] 'set-window-option pane-active-border-style "fg=#{@pc},bg=terminal"'
+
+# 新規ペイン/ウィンドウ作成時に、そのペインへ固有色を自動割り当てする
+set-hook -g after-split-window 'run-shell "~/.config/tmux/assign-pane-color.sh #{pane_id}"'
+set-hook -g after-new-window 'run-shell "~/.config/tmux/assign-pane-color.sh #{pane_id}"'
+
+# ステータスを2行にし、2行目にアクティブペインのカレントディレクトリ(フルパス)を表示する
+set -g status 2
+set -g status-format[1] '#[align=left,fg=black] #{pane_current_path}'
+
+# 既存の全ペインへ固有色を一括割り当てする(source-file 時にも振り直す)
+run-shell '~/.config/tmux/assign-pane-color.sh'
+
+run-shell '~/clone/path/sidebar.tmux'
+
+# tmuxのセッション/ウィンドウ/ペインのレイアウトを保存・復元する
+set -g @plugin 'tmux-plugins/tpm'
+set -g @plugin 'tmux-plugins/tmux-resurrect'
+set -g @plugin 'tmux-plugins/tmux-continuum'
+# tmux起動時に自動でセッションを復元する
+set -g @continuum-restore 'on'
+# resurrectの自動保存間隔(分)。continuumが内部で使う
+set -g @continuum-save-interval '15'
+
+# tpm本体の初期化。必ずtmux.conf最後に書く
+run '~/.tmux/plugins/tpm/tpm'

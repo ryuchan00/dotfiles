@@ -5,8 +5,8 @@
 #	name = ryuchan00
 #	email = yamakawa00@pepabo.com
 [ghq]
-	root = /home/yamakawa00/src
+	root = ~/src
 [ghq "https://git.pepabo.com/"]
 	vcs = git
 [include]
-	path = /home/yamakawa00/src/github.com/ryuchan00/dotfiles/.gitconfig.base
+	path = ~/dotfiles/.gitconfig.base

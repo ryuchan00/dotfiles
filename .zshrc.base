@@ -21,7 +21,13 @@ SAVEHIST=530000
 
 
 function fzf-select-history() {
- BUFFER=$(\history -n 1 | tail -r | awk '!seen[$0]++' | \
+ local reverse_cmd
+ if command -v tac &>/dev/null; then
+   reverse_cmd="tac"
+ else
+   reverse_cmd="tail -r"
+ fi
+ BUFFER=$(\history -n 1 | $reverse_cmd | awk '!seen[$0]++' | \
      fzf --tiebreak=chunk,begin,index --query "$LBUFFER")
  CURSOR=$#BUFFER
  zle reset-prompt
@@ -77,6 +83,7 @@ zstyle ':vcs_info:git:*' check-for-changes true
 #add-zsh-hook precmd _update_prompt
 
 # web db press vol83
+alias cl='claude'
 alias g='git'
 alias ls='ls -F'
 alias la='ls -a'
@@ -228,8 +235,11 @@ setopt nonomatch
 # BSD版sedをGNU版に置き換える
 #export PATH="/usr/local/opt/gnu-sed/libexec/gnubin/:$PATH"
 
-setopt hist_ignore_all_dups
-setopt HIST_SAVE_NO_DUPS
-setopt HIST_IGNORE_SPACE
+setopt HIST_IGNORE_ALL_DUPS   # メモリ上の重複を削除
+setopt HIST_SAVE_NO_DUPS      # ファイル書き込み時に重複を除外
+setopt HIST_FIND_NO_DUPS      # 上キー検索で重複をスキップ
+setopt HIST_REDUCE_BLANKS     # 余分な空白を除去して保存
+setopt HIST_IGNORE_SPACE      # スペース始まりのコマンドは記録しない
+setopt INC_APPEND_HISTORY     # シェル終了を待たず即時ファイルに書き込む
 
 
