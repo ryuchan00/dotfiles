@@ -54,8 +54,8 @@ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
 ### Ubuntu(WSL)で追加で確認すること
 
-- tmux 3.0以降が必要である。プラグインがペイン単位オプション(`set-option -p`)とhookの配列指定を使うため、`tmux -V`で確認する。動作確認はmacOSのtmux 3.7bでのみ行っている。
+- tmux 3.0以降が必要である。プラグインがペイン単位オプション(`set-option -p`)とhookの配列指定を使うため、`tmux -V`で確認する。動作確認はmacOSのtmux 3.7bとUbuntu(WSL)のtmux 3.2aで行っている。
 - `apt install sqlite3 jq`で`pane-last-session.sh`と`record-session.sh`の依存が揃う。
 - `~/.claude/hooks/`の`notify-stop.sh`と`notify-waiting.sh`は`osascript`と`afplay`で通知と音を出すため、WSLではその部分を置き換えるか削る。`alert.sh`の呼び出しはそのまま動く。
 - 枠線の`━━`やアラート記号の幅が崩れるときは、`@pane_beacon_alert_icon`を`!`などに変える。
-- `apt install bats shellcheck`のあと、`~/.tmux/plugins/tmux-pane-beacon`で`make test`と`make lint`を実行すると、そのtmuxで動くかを確認できる。
+- プラグインのバイナリはRust製で、`make test`と`make lint`は最初に`cargo`を呼ぶ。rustup(<https://rustup.rs>)でRustツールチェーン(`cargo`、`clippy`、`rustfmt`)を入れ、`apt install bats shellcheck`を実行したあと、`~/.tmux/plugins/tmux-pane-beacon`で`make test`と`make lint`を実行すると、そのtmuxで動くかを確認できる。プラグインを使うだけならRustは不要である。
