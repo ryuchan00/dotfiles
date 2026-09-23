@@ -1,6 +1,6 @@
 ﻿# =============================================================
 #  PowerShell プロファイル
-#  zsh (peco / anyframe / cdr) のキーバインドを fzf + zoxide で再現する
+#  WSL の zsh (fzf / anyframe / cdr) のキーバインドを fzf + zoxide で再現する
 # =============================================================
 
 # ---------- PATH ----------
@@ -39,17 +39,17 @@ if (Get-Command zoxide -ErrorAction SilentlyContinue) {
 }
 
 # =============================================================
-#  fzf ベースのキーバインド (zsh 側の peco / anyframe 相当)
+#  fzf ベースのキーバインド (WSL の zsh 側と同じ操作を割り当てる)
 # =============================================================
 
-# 入力行を選択結果で置き換える。実行はせずカーソルを末尾に置くだけ (peco-select-history と同じ挙動)
+# 入力行を選択結果で置き換える。実行はせずカーソルを末尾に置くだけ (zsh の fzf-select-history と同じ挙動)
 function Set-FzfLine([string]$text) {
     if (-not $text) { return }
     [Microsoft.PowerShell.PSConsoleReadLine]::RevertLine()
     [Microsoft.PowerShell.PSConsoleReadLine]::Insert($text)
 }
 
-# --- Ctrl+L : 最近使ったディレクトリへ移動 (zsh の peco-cdr 相当) ---
+# --- Ctrl+L : 最近使ったディレクトリへ移動 (zsh の fzf-cdr 相当) ---
 # 既定の Ctrl+L (画面クリア) は Ctrl+Shift+L に退避する。cls / clear も従来どおり使える
 Set-PSReadLineKeyHandler -Chord 'Ctrl+Shift+l' -Function ClearScreen
 Set-PSReadLineKeyHandler -Chord 'Ctrl+l' -BriefDescription 'FuzzyRecentDirectory' -LongDescription '最近使ったディレクトリを fzf で選んで移動' -ScriptBlock {
@@ -60,7 +60,7 @@ Set-PSReadLineKeyHandler -Chord 'Ctrl+l' -BriefDescription 'FuzzyRecentDirectory
     }
 }
 
-# --- Ctrl+R : 履歴のあいまい検索 (zsh の peco-select-history 相当) ---
+# --- Ctrl+R : 履歴のあいまい検索 (zsh の fzf-select-history 相当) ---
 Set-PSReadLineKeyHandler -Chord 'Ctrl+r' -BriefDescription 'FuzzyHistory' -LongDescription '履歴を fzf で検索して入力行に挿入' -ScriptBlock {
     $path = (Get-PSReadLineOption).HistorySavePath
     if (-not (Test-Path $path)) { return }
@@ -70,7 +70,7 @@ Set-PSReadLineKeyHandler -Chord 'Ctrl+r' -BriefDescription 'FuzzyHistory' -LongD
     Set-FzfLine $sel
 }
 
-# --- Ctrl+K : プロセスを選んで kill コマンドを組み立てる (zsh の anyframe kill 相当) ---
+# --- Ctrl+K : プロセスを選んで kill コマンドを組み立てる (zsh の fzf-kill 相当) ---
 # 安全のため即実行はせず、Stop-Process コマンドを入力行に置くだけにしている。確認して Enter
 Set-PSReadLineKeyHandler -Chord 'Ctrl+k' -BriefDescription 'FuzzyKillProcess' -LongDescription 'プロセスを fzf で選び Stop-Process を入力行に挿入' -ScriptBlock {
     $sel = Get-Process |
