@@ -101,7 +101,7 @@ run-shell '~/clone/path/sidebar.tmux'
 set -g @plugin 'tmux-plugins/tpm'
 set -g @plugin 'tmux-plugins/tmux-resurrect'
 set -g @plugin 'tmux-plugins/tmux-continuum'
-# GitHub 未公開のため、~/.tmux/plugins/tmux-pane-beacon を dotfiles/tmux-pane-beacon への symlink にして使う
+# 独立リポジトリ https://github.com/ryuchan00/tmux-pane-beacon として公開。prefix + I で導入する
 set -g @plugin 'ryuchan00/tmux-pane-beacon'
 # tmux起動時に自動でセッションを復元する
 set -g @continuum-restore 'on'

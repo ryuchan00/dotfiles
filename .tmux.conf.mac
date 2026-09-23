@@ -99,7 +99,7 @@ set -g @pane_beacon_title_fallback '#(~/.config/tmux/pane-last-session.sh "#{pan
 set -g @plugin 'tmux-plugins/tpm'
 set -g @plugin 'tmux-plugins/tmux-resurrect'
 set -g @plugin 'tmux-plugins/tmux-continuum'
-# ローカル開発中は ~/.tmux/plugins/tmux-pane-beacon を dotfiles/tmux-pane-beacon への symlink にしている
+# 独立リポジトリ https://github.com/ryuchan00/tmux-pane-beacon として公開。prefix + I で導入する
 set -g @plugin 'ryuchan00/tmux-pane-beacon'
 
 # セッション自動保存・自動復元

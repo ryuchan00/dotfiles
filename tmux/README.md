@@ -16,7 +16,7 @@ tmuxの設定ファイル本体ではなく、設定ファイルから`#()`や`r
 |---|---|
 | [`.tmux.conf.mac`](../.tmux.conf.mac) | macOS用の設定本体。prefix(`C-t`)、vi風のコピー操作と`pbcopy`連携、ペイン移動とリサイズ、2行ステータス、TPMのプラグイン一覧 |
 | [`.tmux.conf.ubuntu`](../.tmux.conf.ubuntu) | Ubuntu(WSL)用の設定本体。`clip.exe`連携と、TPM経由のtmux-pane-beacon |
-| [`tmux-pane-beacon/`](../tmux-pane-beacon/) | ペインごとの固有色と、枠線上部の「[番号] タイトル」またはアラート表示を担うTPMプラグイン。オプションとアラートの使い方は同ディレクトリのREADME |
+| [tmux-pane-beacon](https://github.com/ryuchan00/tmux-pane-beacon) | ペインごとの固有色と、枠線上部の「[番号] タイトル」またはアラート表示を担うTPMプラグイン。このリポジトリから切り出して公開済みで、TPMが`~/.tmux/plugins/`へ取得する。オプションとアラートの使い方は同リポジトリのREADME |
 | `tmux/`(このディレクトリ) | 上の設定から呼ぶ補助スクリプト |
 | [`cheat-sheet-tmux.md`](../cheat-sheet-tmux.md) | 操作のチートシート |
 
@@ -32,7 +32,7 @@ sqliteへの記録と、処理完了や入力待ちのアラートは`~/.claude/
 | hook | 役割 |
 |---|---|
 | `record-session.sh` | セッション要約(`pane_title`)、session_id、`tmux_pane`、tmuxサーバーのPIDを`~/.claude/sessions.db`に記録する |
-| `notify-stop.sh`と`notify-waiting.sh` | `tmux-pane-beacon/scripts/alert.sh`を呼び、画面に見えていないペインの枠とウィンドウタブにアラートを付ける |
+| `notify-stop.sh`と`notify-waiting.sh` | `~/.tmux/plugins/tmux-pane-beacon/scripts/alert.sh`を呼び、画面に見えていないペインの枠とウィンドウタブにアラートを付ける |
 
 `pane-last-session.sh`がサーバーPIDで絞り込むのは、tmuxサーバーを再起動するとペインIDが再利用され、別セッションの記録を拾うためである。
 
@@ -45,10 +45,8 @@ sqliteへの記録と、処理完了や入力待ちのアラートは`~/.claude/
 # 2. TPMを入れる
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
-# 3. tmux-pane-beaconはGitHubに公開していないため、TPMのプラグインディレクトリへsymlinkする
-ln -s "$(pwd)/tmux-pane-beacon" ~/.tmux/plugins/tmux-pane-beacon
-
-# 4. tmuxを起動し、prefix + I (C-t I) で残りのプラグインを入れる
+# 3. tmuxを起動し、prefix + I (C-t I) でプラグインを入れる
+#    tmux-pane-beacon もここでGitHubから取得される
 ```
 
 `pane-last-session.sh`は`sqlite3`コマンドと`~/.claude/sessions.db`を前提とする。
@@ -60,4 +58,4 @@ ln -s "$(pwd)/tmux-pane-beacon" ~/.tmux/plugins/tmux-pane-beacon
 - `apt install sqlite3 jq`で`pane-last-session.sh`と`record-session.sh`の依存が揃う。
 - `~/.claude/hooks/`の`notify-stop.sh`と`notify-waiting.sh`は`osascript`と`afplay`で通知と音を出すため、WSLではその部分を置き換えるか削る。`alert.sh`の呼び出しはそのまま動く。
 - 枠線の`━━`やアラート記号の幅が崩れるときは、`@pane_beacon_alert_icon`を`!`などに変える。
-- `apt install bats shellcheck`のあと、`tmux-pane-beacon/`で`make test`と`make lint`を実行すると、そのtmuxで動くかを確認できる。
+- `apt install bats shellcheck`のあと、`~/.tmux/plugins/tmux-pane-beacon`で`make test`と`make lint`を実行すると、そのtmuxで動くかを確認できる。
