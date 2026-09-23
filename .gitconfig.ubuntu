@@ -1,12 +1,7 @@
 [user]
 	name = ryuchun00
 	email = leokun0210@gmail.com
-# [user]
-#	name = ryuchan00
-#	email = yamakawa00@pepabo.com
 [ghq]
 	root = ~/src
-[ghq "https://git.pepabo.com/"]
-	vcs = git
 [include]
 	path = ~/dotfiles/.gitconfig.base
